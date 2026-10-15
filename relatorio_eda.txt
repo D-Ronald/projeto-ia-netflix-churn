@@ -1,0 +1,211 @@
+
+======================================================================
+1. DEFINIÇÃO DO CONJUNTO DE DADOS
+======================================================================
+Fonte: Kaggle - Netflix Customer Churn
+Domínio: clientes de um serviço de streaming (dados de perfil, uso e assinatura).
+Atributo-alvo: 'churned' (1 = cliente cancelou, 0 = cliente permaneceu).
+Tarefa: classificação binária.
+
+======================================================================
+2. ESTRUTURA DO DATASET
+======================================================================
+Número de exemplos (linhas): 5000
+Número de colunas: 14 (1 identificador + 12 atributos preditores + 1 alvo)
+                          dtype  valores_unicos  ausentes  ausentes_%  tipo_semantico
+customer_id                 str            5000         0         0.0   identificador
+age                       int64              53         0         0.0        numérico
+gender                      str               3         0         0.0      categórico
+subscription_type           str               3         0         0.0      categórico
+watch_hours             float64            2343         0         0.0        numérico
+last_login_days           int64              61         0         0.0        numérico
+region                      str               6         0         0.0      categórico
+device                      str               5         0         0.0      categórico
+monthly_fee             float64               3         0         0.0        numérico
+churned                   int64               2         0         0.0  alvo (binário)
+payment_method              str               5         0         0.0      categórico
+number_of_profiles        int64               5         0         0.0        numérico
+avg_watch_time_per_day  float64             505         0         0.0        numérico
+favorite_genre              str               7         0         0.0      categórico
+
+Total de valores ausentes: 0
+Linhas duplicadas: 0
+IDs de cliente duplicados: 0
+
+======================================================================
+3. DISTRIBUIÇÃO DOS ATRIBUTOS
+======================================================================
+Estatísticas descritivas dos atributos numéricos:
+                         count    mean     std    min     25%    50%    75%     max  assimetria
+age                     5000.0  43.847  15.501  18.00  30.000  44.00  58.00   70.00       0.006
+watch_hours             5000.0  11.649  12.015   0.01   3.338   8.00  16.03  110.40       2.259
+last_login_days         5000.0  30.090  17.536   0.00  15.000  30.00  45.00   60.00      -0.026
+monthly_fee             5000.0  13.683   3.692   8.99   8.990  13.99  17.99   17.99      -0.145
+number_of_profiles      5000.0   3.024   1.416   1.00   2.000   3.00   4.00    5.00      -0.017
+avg_watch_time_per_day  5000.0   0.875   2.620   0.00   0.110   0.29   0.72   98.42      15.835
+
+Frequência das categorias de cada atributo categórico:
+
+gender:
+gender
+Female    1711
+Male      1654
+Other     1635
+
+subscription_type:
+subscription_type
+Premium     1693
+Basic       1661
+Standard    1646
+
+region:
+region
+South America    873
+Europe           867
+North America    851
+Asia             841
+Africa           803
+Oceania          765
+
+device:
+device
+Tablet     1048
+Laptop     1006
+Mobile     1004
+TV          993
+Desktop     949
+
+payment_method:
+payment_method
+Debit Card     1030
+PayPal         1026
+Crypto          995
+Gift Card       976
+Credit Card     973
+
+favorite_genre:
+favorite_genre
+Drama          731
+Documentary    729
+Romance        725
+Sci-Fi         720
+Horror         713
+Action         697
+Comedy         685
+
+======================================================================
+4. BALANCEAMENTO DAS CLASSES
+======================================================================
+Classe 0: 2485 exemplos (49.7%)
+Classe 1: 2515 exemplos (50.3%)
+Razão maioria/minoria: 1.012
+Conclusão: classes praticamente balanceadas -> não é necessário oversampling/undersampling (SMOTE etc.).
+
+======================================================================
+5. RELAÇÃO DOS ATRIBUTOS COM O ALVO
+======================================================================
+Correlação de cada atributo numérico com o alvo:
+watch_hours              -0.480
+avg_watch_time_per_day   -0.273
+number_of_profiles       -0.159
+monthly_fee              -0.152
+age                      -0.004
+last_login_days           0.472
+
+Taxa de churn (%) por categoria:
+
+gender:
+gender
+Female    51.1
+Male      50.0
+Other     49.8
+
+subscription_type:
+subscription_type
+Basic       61.8
+Standard    45.4
+Premium     43.7
+
+region:
+region
+Europe           51.7
+South America    51.4
+Asia             50.7
+Oceania          50.1
+North America    49.5
+Africa           48.3
+
+device:
+device
+Laptop     51.8
+Mobile     50.5
+Tablet     50.0
+TV         49.9
+Desktop    49.2
+
+payment_method:
+payment_method
+Crypto         59.7
+Gift Card      57.8
+PayPal         47.1
+Debit Card     43.7
+Credit Card    43.6
+
+favorite_genre:
+favorite_genre
+Action         52.4
+Drama          52.3
+Horror         51.5
+Documentary    50.8
+Comedy         49.9
+Romance        48.3
+Sci-Fi         47.1
+
+======================================================================
+6. REDUNDÂNCIAS E OUTLIERS
+======================================================================
+Valores de monthly_fee por plano:
+subscription_type
+Basic        [8.99]
+Premium     [17.99]
+Standard    [13.99]
+-> monthly_fee é totalmente determinado por subscription_type (atributo redundante).
+
+Hipótese: avg_watch_time_per_day ≈ watch_hours / (last_login_days + 1)
+Erro absoluto médio da hipótese: 0.0024 (máx. 0.0050)
+-> atributo derivado; valores extremos ocorrem quando last_login_days = 0.
+
+Outliers pelo critério IQR (1,5 x IQR):
+                        qtd_outliers      %
+age                                0   0.00
+watch_hours                      238   4.76
+last_login_days                    0   0.00
+monthly_fee                        0   0.00
+number_of_profiles                 0   0.00
+avg_watch_time_per_day           549  10.98
+-> Outliers apenas em watch_hours e avg_watch_time_per_day. São valores plausíveis (clientes que assistem muito), então NÃO serão removidos; a assimetria será reduzida com transformação log(1 + x).
+
+======================================================================
+7. PRÉ-PROCESSAMENTO APLICADO
+======================================================================
+[1] customer_id removido (identificador único, sem valor preditivo).
+[2] monthly_fee removido (redundante com subscription_type).
+[3] log(1 + x) aplicado em watch_hours e avg_watch_time_per_day.
+    Assimetria após log: watch_hours = -0.15, avg_watch_time_per_day = 2.51
+[4] subscription_type codificado como ordinal: Basic=0, Standard=1, Premium=2.
+[5] One-hot encoding em ['gender', 'region', 'device', 'payment_method', 'favorite_genre'].
+    -> data/processed/netflix_churn_encoded.csv: 5000 linhas x 33 colunas
+[6] StandardScaler aplicado em ['age', 'watch_hours', 'last_login_days', 'number_of_profiles', 'avg_watch_time_per_day', 'subscription_type'].
+    -> data/processed/netflix_churn_scaled.csv: 5000 linhas x 33 colunas
+
+Itens que NÃO precisaram de tratamento:
+  - Valores ausentes: nenhum encontrado.
+  - Duplicatas: nenhuma encontrada.
+  - Balanceamento: classes ~50/50, nenhuma técnica de reamostragem necessária.
+
+======================================================================
+RESUMO FINAL
+======================================================================
+Original:        5000 exemplos x 14 colunas
+Pré-processado:  5000 exemplos x 32 atributos + 1 alvo
+Figuras salvas em: figuras/
