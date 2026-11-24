@@ -1,0 +1,8 @@
+algoritmo,parametros,accuracy_media,accuracy_dp,precision_media,precision_dp,recall_media,recall_dp,f1_media,f1_dp,roc_auc_media,roc_auc_dp,tempo_ajuste_s
+Árvore de Decisão,"criterion=entropy, max_depth=None, min_samples_leaf=1",0.9910,0.0082,0.9936,0.0058,0.9885,0.0116,0.9910,0.0082,0.9910,0.0082,0.0583
+KNN,"n_neighbors=101, p=1, weights=distance",0.9088,0.0119,0.8688,0.0148,0.9646,0.0142,0.9141,0.0110,0.9786,0.0052,0.0272
+Naive Bayes,var_smoothing=1e-09,0.8674,0.0162,0.8188,0.0218,0.9467,0.0186,0.8779,0.0141,0.9553,0.0051,0.0321
+Regressão Logística,"C=1, l1_ratio=1.0",0.8924,0.0160,0.8876,0.0193,0.9006,0.0275,0.8937,0.0167,0.9656,0.0070,1.1731
+SVM,"C=1, gamma=0.1, kernel=rbf",0.9148,0.0172,0.9081,0.0183,0.9245,0.0292,0.9160,0.0178,0.9774,0.0067,1.9447
+MLP,"activation=tanh, alpha=0.01, hidden_layer_sizes=(64, 32)",0.9258,0.0206,0.9245,0.0255,0.9289,0.0189,0.9265,0.0197,0.9819,0.0080,5.8379
+Média geral,-,0.9167,0.0417,0.9002,0.0586,0.9423,0.0313,0.9199,0.0390,0.9750,0.0126,

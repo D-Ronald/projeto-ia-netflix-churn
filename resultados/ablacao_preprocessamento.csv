@@ -1,0 +1,19 @@
+algoritmo,cenario,accuracy_media,accuracy_dp,f1_media,f1_dp
+Árvore de Decisão,Completo,0.9910,0.0082,0.9910,0.0082
+Árvore de Decisão,Sem padronização,0.9910,0.0082,0.9910,0.0082
+Árvore de Decisão,Sem log,0.9910,0.0082,0.9910,0.0082
+KNN,Completo,0.9088,0.0119,0.9141,0.0110
+KNN,Sem padronização,0.7642,0.0184,0.7683,0.0194
+KNN,Sem log,0.8774,0.0177,0.8872,0.0157
+Naive Bayes,Completo,0.8674,0.0162,0.8779,0.0141
+Naive Bayes,Sem padronização,0.8674,0.0162,0.8779,0.0141
+Naive Bayes,Sem log,0.8254,0.0107,0.8502,0.0080
+Regressão Logística,Completo,0.8924,0.0160,0.8937,0.0167
+Regressão Logística,Sem padronização,0.8912,0.0143,0.8921,0.0151
+Regressão Logística,Sem log,0.8940,0.0154,0.8955,0.0164
+SVM,Completo,0.9148,0.0172,0.9160,0.0178
+SVM,Sem padronização,0.8386,0.0172,0.8407,0.0168
+SVM,Sem log,0.9110,0.0143,0.9122,0.0149
+MLP,Completo,0.9258,0.0206,0.9265,0.0197
+MLP,Sem padronização,0.9028,0.0246,0.9036,0.0251
+MLP,Sem log,0.9352,0.0082,0.9353,0.0084

@@ -1,0 +1,16 @@
+modelo_A,modelo_B,p_valor,p_holm,significativo_5%
+Árvore de Decisão,KNN,0.001953,0.0293,True
+Árvore de Decisão,Naive Bayes,0.001953,0.0293,True
+Árvore de Decisão,Regressão Logística,0.001953,0.0293,True
+Árvore de Decisão,SVM,0.001953,0.0293,True
+Árvore de Decisão,MLP,0.001953,0.0293,True
+KNN,Naive Bayes,0.001953,0.0293,True
+KNN,Regressão Logística,0.001953,0.0293,True
+KNN,SVM,0.5566,0.5566,False
+KNN,MLP,0.1055,0.252,False
+Naive Bayes,Regressão Logística,0.01953,0.07812,False
+Naive Bayes,SVM,0.001953,0.0293,True
+Naive Bayes,MLP,0.003906,0.0293,True
+Regressão Logística,SVM,0.001953,0.0293,True
+Regressão Logística,MLP,0.003906,0.0293,True
+SVM,MLP,0.08398,0.252,False

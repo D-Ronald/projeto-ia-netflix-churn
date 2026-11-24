@@ -108,3 +108,43 @@ Resultado: **5.000 exemplos × 32 atributos + 1 alvo**.
 | `06_numericos_por_classe.png` | Numéricos separados por classe |
 | `07_churn_por_categoria.png` | Taxa de churn por categoria |
 | `08_apos_transformacao_log.png` | Distribuição após `log(1+x)` |
+
+---
+
+# Entrega 2 – Experimentos de classificação
+
+Script: `experimentos.py` (requer `data/processed/netflix_churn_encoded.csv`).
+
+```bash
+python experimentos.py
+```
+
+**Procedimento:** 6 algoritmos (Árvore de Decisão, KNN, Naive Bayes Gaussiano,
+Regressão Logística, SVM, MLP), cada um com uma grade de hiperparâmetros (5 a 24
+combinações) avaliada via `GridSearchCV` com **10-fold cross-validation estratificado**
+(mesmos folds para todos). Em cada fold são coletadas acurácia, precisão, recall, F1 e
+AUC-ROC; reporta-se média ± desvio padrão (ddof=1). O `StandardScaler` está dentro de um
+`Pipeline`, ajustado só no treino de cada fold.
+
+**Saídas** (`resultados/`): `todas_combinacoes.csv`, `metricas_por_fold.csv`,
+`melhores_por_algoritmo.csv` (com linha "Média geral"), `testes_wilcoxon.csv`,
+`ablacao_preprocessamento.csv`, `matrizes_confusao.csv`,
+`importancia_atributos_arvore.csv`, `relatorio_experimentos.txt`.
+Figuras `figuras/09` a `15`.
+
+**Melhor configuração de cada algoritmo (F1, média ± dp):**
+
+| Algoritmo | Parâmetros | F1 |
+|---|---|---|
+| Árvore de Decisão | entropy, sem limite de profundidade | 0,991 ± 0,008 |
+| MLP | (64, 32), tanh, alpha=0,01 | 0,926 ± 0,020 |
+| SVM | RBF, C=1, gamma=0,1 | 0,916 ± 0,018 |
+| KNN | k=101, Manhattan, ponderado | 0,914 ± 0,011 |
+| Regressão Logística | C=1, L1 | 0,894 ± 0,017 |
+| Naive Bayes | var_smoothing=1e-9 | 0,878 ± 0,014 |
+
+Friedman: p ≈ 5e-8. A Árvore é significativamente superior a todos (Wilcoxon + Holm).
+Ablação: sem padronização o KNN cai de 0,914 → 0,768 e o SVM de 0,916 → 0,841; a Árvore
+não é afetada.
+
+O artigo (formato SBC, PDF) com a análise completa dos resultados é entregue à parte.
